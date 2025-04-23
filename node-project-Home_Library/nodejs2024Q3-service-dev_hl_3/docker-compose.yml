@@ -1,0 +1,60 @@
+services:
+  app:
+    container_name: home_lib_container
+    build:
+      dockerfile: Dockerfile
+      context: .
+      target: development
+    depends_on:
+      - postgres
+    environment:
+      env_file: ".env"
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run start:migrate:dev
+    restart: always
+    networks:
+      - home-library
+      
+  postgres:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    environment:
+      # PG_DATA: /var/lib/postgresql/data
+      # POSTGRES_PORT: ${POSTGRES_PORT}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - pglog:/var/log/postgresql
+    networks:
+      - home-library
+
+  postgres_admin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    environment:
+      PGADMIN_DEFAULT_EMAIL: gogicha@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: password
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      - "5050:80"
+    networks:
+      - home-library
+
+volumes:
+  pgdata:
+  pglog:
+
+networks:
+  home-library:
