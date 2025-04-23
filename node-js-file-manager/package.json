@@ -1,0 +1,13 @@
+{
+  "name": "node_file_manager",
+  "version": "1.0.0",
+  "description": "Node JS CLI File Manager",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "gogicha007",
+  "license": "ISC"
+}
